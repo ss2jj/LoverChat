@@ -1,0 +1,98 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".LoginActivity" >
+   <LinearLayout android:id="@+id/title"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/title_height"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
+    android:background="@color/blue" >
+    
+    <TextView android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="@string/login"
+        android:textSize="20sp"
+        android:textColor="#ffffff"/>
+   </LinearLayout>
+
+   <LinearLayout android:id="@+id/username"
+       android:layout_width="match_parent"
+       android:layout_height="@dimen/username_height"
+       android:orientation="horizontal"
+       android:layout_marginTop="30dp"
+      android:layout_marginLeft="28dp"
+      android:layout_marginRight="28dp"
+       >
+       <ImageView android:id="@+id/userNameText"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center"
+           android:background="@drawable/icon_account"
+           />
+       <EditText android:id="@+id/userNameEdit"
+            android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:layout_gravity="center"
+           android:hint="@string/userName"
+           android:singleLine="true"
+          />
+   </LinearLayout>
+    <LinearLayout android:id="@+id/passwd"
+       android:layout_width="match_parent"
+       android:layout_height="@dimen/passwd_height"
+       android:orientation="horizontal"
+       android:layout_marginTop="20dp"
+      android:layout_marginLeft="28dp"
+      android:layout_marginRight="28dp"
+       >
+       <ImageView android:id="@+id/passwdText"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center"
+           android:background="@drawable/icon_pwd"
+           />
+       <EditText android:id="@+id/passwdEdit"
+            android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:layout_gravity="center"
+           android:hint="@string/passwd"
+           android:inputType="textPassword"
+           android:singleLine="true"
+          />
+   </LinearLayout>
+   
+      <LinearLayout 
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="horizontal"
+       android:gravity="center"
+       android:layout_marginTop="28dp"
+       >
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@drawable/login_btn_selector"
+            android:onClick="login"
+            android:text="@string/loginbt"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dip"
+            android:layout_weight="3"
+            android:background="@drawable/login_btn_selector"
+            android:onClick="register"
+            android:gravity="center"
+            android:text="@string/registbt"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+   </LinearLayout>
+</LinearLayout>

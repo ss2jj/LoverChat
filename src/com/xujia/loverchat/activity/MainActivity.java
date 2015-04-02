@@ -1,16 +1,22 @@
 
-package com.xujia.loverchat;
+package com.xujia.loverchat.activity;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
+
+import com.xujia.loverchat.R;
+import com.xujia.loverchat.R.layout;
+import com.xujia.loverchat.R.menu;
 
 public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
+        startActivity(new Intent(this,LoginActivity.class));
     }
 
     @Override
