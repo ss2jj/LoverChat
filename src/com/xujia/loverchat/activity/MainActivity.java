@@ -1,10 +1,12 @@
 
 package com.xujia.loverchat.activity;
 
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
+import android.widget.EditText;
 
 import com.xujia.loverchat.R;
 import com.xujia.loverchat.R.layout;
