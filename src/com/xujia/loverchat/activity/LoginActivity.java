@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMGroupManager;
 import com.xujia.loverchat.R;
 import com.xujia.loverchat.R.layout;
 import com.xujia.loverchat.R.menu;
@@ -119,6 +120,7 @@ public class LoginActivity extends Activity {
                 }
             });
             EMChatManager.getInstance().getAllConversations();
+            EMGroupManager.getInstance().loadAllGroups();
             EMChatManager.getInstance().updateCurrentUserNick(userName);
             if(!LoginActivity.this.isFinishing())   {
                 pd.dismiss();
