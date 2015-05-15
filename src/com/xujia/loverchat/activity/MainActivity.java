@@ -1,7 +1,6 @@
 
 package com.xujia.loverchat.activity;
 
-import android.media.ExifInterface;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -12,16 +11,12 @@ import android.view.Menu;
 import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
 import com.xujia.loverchat.R;
-import com.xujia.loverchat.R.layout;
-import com.xujia.loverchat.R.menu;
 import com.xujia.loverchat.control.HXSDKHelper;
 
 public class MainActivity extends Activity {
@@ -36,6 +31,7 @@ private static final int ANIM_TIME = 2000;
         RelativeLayout rootLayout = (RelativeLayout) findViewById(R.id.splash_activity);
         AlphaAnimation ap = (AlphaAnimation) AnimationUtils.loadAnimation(this, R.anim.anim_main);
         rootLayout.setAnimation(ap);
+      
       
        
     }
