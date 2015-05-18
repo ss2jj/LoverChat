@@ -134,7 +134,7 @@ private Context context;
            addView(iv_shadow, 1, lp);
        }
       vg_left = (RelativeLayout)getChildAt(0);
-      vg_main = (MyRelativeLayout)getChildAt(1);
+      vg_main = (MyRelativeLayout)getChildAt(isShowShadow?2:1);
       vg_main.setDragLayout(this);
       vg_left.setClickable(true);
       vg_main.setClickable(true);
@@ -176,7 +176,7 @@ private Context context;
    public void setDragListener(DragListener dragListener) {
        this.dragListener = dragListener;
    }
-   //分发滑动事件 给外界处理 同时进行动画处理
+   //分发滑动事件 给外界处理 同时进行动画缩放处理
    private void dispatchDragEvent(int mainLeft) {
        if(dragListener == null) return;
        float percent = mainLeft / (float) range;

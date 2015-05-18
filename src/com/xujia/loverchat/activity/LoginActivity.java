@@ -44,7 +44,7 @@ public class LoginActivity extends Activity {
         //已经登录则跳过此界面不显示 直接进入主界面
         if(HXSDKHelper.getInstance().isLogined())   {
             autologin = true;
-           // startActivity(new Intent());
+           startActivity(new Intent(this,ChatActivity.class));
             return ;
         }
         setContentView(R.layout.activity_login);

@@ -1,0 +1,25 @@
+<com.xujia.loverchat.view.DragLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dl"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/chatbg"
+    android:clickable="true"
+    android:orientation="vertical" >
+
+    <!-- 左侧菜单页面 -->
+
+    <include layout="@layout/left_menu" />
+
+    <com.xujia.loverchat.view.MyRelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#eeeeee"
+        android:orientation="vertical" >
+
+        <!-- headbanner -->
+
+        <include layout="@layout/main_chat" />
+    </com.xujia.loverchat.view.MyRelativeLayout>
+
+</com.xujia.loverchat.view.DragLayout>

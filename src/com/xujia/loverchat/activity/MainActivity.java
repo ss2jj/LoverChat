@@ -57,8 +57,8 @@ private static final int ANIM_TIME = 2000;
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-                    //startActivity();
-                   // finish();
+                    startActivity(new Intent(MainActivity.this,ChatActivity.class));
+                   finish();
                 }else   {
                     try {
                     

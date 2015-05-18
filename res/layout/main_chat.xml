@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+     android:background="@android:color/white"
+    android:orientation="vertical">
+    <RelativeLayout android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#00C5CD"
+        android:orientation="horizontal">
+        <ImageButton android:id="@+id/leftmenu_btn"
+            android:layout_width="20dp"
+            android:layout_height="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/leftmenu_btn_selector"/>
+        <TextView android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:shadowColor="#FFFFFF"
+       		android:shadowDx="0"
+        	android:shadowDy="2"
+        	android:shadowRadius="1"
+        	android:textColor="#444444"
+        	android:typeface="serif"
+            android:text="@string/apps_name"
+            />		 <ImageButton android:id="@+id/rightmore_btn"
+		    
+		     android:layout_alignParentRight="true"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/right_add"/>
+    </RelativeLayout>
+<TabHost 
+    android:id="@+id/tabhost"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+     >
+    <LinearLayout android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TabWidget android:id="@android:id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+            <FrameLayout android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@android:id/tabcontent">
+            </FrameLayout>
+    </LinearLayout>
+
+</TabHost>
+</LinearLayout>
