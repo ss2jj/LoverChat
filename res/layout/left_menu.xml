@@ -2,7 +2,48 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingLeft="5dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
     android:orientation="vertical" >
     
-
+    <LinearLayout android:id="@+id/self_center"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <com.xujia.loverchat.view.RoundImageView android:id="@+id/user_head"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:src="@drawable/image_touxiang" >
+            </com.xujia.loverchat.view.RoundImageView>
+         <TextView android:id="@+id/user_name"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:singleLine="true"
+             android:text="@string/self_center"
+             android:layout_marginTop="20dp"
+             android:textColor="#ffffff"
+             android:textSize="15sp"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/menu_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/setting_center"
+        android:gravity="center"
+        android:drawableLeft="@drawable/setting_center"
+        android:textColor="#ffffff"
+        android:textSize="15sp" />
+	<ListView android:id="@+id/menus"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_above="@id/menu_setting"
+	    android:layout_below="@id/self_center"
+	    android:cacheColorHint="#00000000"
+	    android:divider="@null"
+	    android:scrollbars="none"
+        android:textColor="#ffffff">
+	</ListView>
+	
 </RelativeLayout>

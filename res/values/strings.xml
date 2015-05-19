@@ -31,6 +31,8 @@
     <string name="user_conflict">当前用户已存在</string>
     <string name="register_fail">注册失败</string>
     <string name="apps_name">亲密聊</string>
+    <string name="self_center">个人中心</string>
+    <string name="setting_center">设置中心</string>
     <string name="title_activity_chat">ChatActivity</string>
     <string name="title_activity_conversations">ConversationsActivity</string>
     <string name="title_activity_add_friend">AddFriendActivity</string>
