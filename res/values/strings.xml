@@ -33,6 +33,13 @@
     <string name="apps_name">亲密聊</string>
     <string name="self_center">个人中心</string>
     <string name="setting_center">设置中心</string>
+    <string name="item_alarm">闹钟提醒</string>
+    <string name="item_interaction">亲密互动</string>
+    <string name="item_logout">退出登录</string>
+    <string name="item_idea">意见反馈</string>
+    <string name="item_date">爱情日志</string>
+    <string name="tab_chat">聊天</string>
+    <string name="tab_friend">好友</string>
     <string name="title_activity_chat">ChatActivity</string>
     <string name="title_activity_conversations">ConversationsActivity</string>
     <string name="title_activity_add_friend">AddFriendActivity</string>

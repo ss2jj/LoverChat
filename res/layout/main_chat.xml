@@ -9,8 +9,8 @@
         android:background="#00C5CD"
         android:orientation="horizontal">
         <ImageButton android:id="@+id/leftmenu_btn"
-            android:layout_width="20dp"
-            android:layout_height="15dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginLeft="10dp"
             android:layout_centerVertical="true"
             android:src="@drawable/leftmenu_btn_selector"/>
@@ -24,6 +24,7 @@
         	android:shadowRadius="1"
         	android:textColor="#444444"
         	android:typeface="serif"
+        	android:textSize="20sp"
             android:text="@string/apps_name"
             />		 <ImageButton android:id="@+id/rightmore_btn"
 		    

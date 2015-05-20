@@ -43,25 +43,33 @@ private LocalActivityManager mLocalActivity;
         List<Map<String,Object>> menuLists =  new ArrayList<Map<String,Object>>();
         Map<String,Object> menu;
         menu =  new HashMap<String, Object>();
-        menu.put("item", "设置1");
-        menu.put("image", R.drawable.ic_launcher);
+        menu.put("item", getResources().getString(R.string.item_alarm));
+        menu.put("image", R.drawable.item_alarm);
         menuLists.add(menu);
         menu =  new HashMap<String, Object>();
-        menu.put("item", "设置2");
-        menu.put("image", R.drawable.ic_launcher);
+        menu.put("item", getResources().getString(R.string.item_interaction));
+        menu.put("image", R.drawable.item_interation);
         menuLists.add(menu);
         menu =  new HashMap<String, Object>();
-        menu.put("item", "设置3");
-        menu.put("image", R.drawable.ic_launcher);
-        menuLists.add(menu);                       
+        menu.put("item", getResources().getString(R.string.item_date));
+        menu.put("image", R.drawable.item_date);
+        menuLists.add(menu);      
+        menu =  new HashMap<String, Object>();
+        menu.put("item", getResources().getString(R.string.item_idea));
+        menu.put("image", R.drawable.item_idea);
+        menuLists.add(menu);   
+        menu =  new HashMap<String, Object>();
+        menu.put("item", getResources().getString(R.string.item_logout));
+        menu.put("image", R.drawable.item_logout);
+        menuLists.add(menu);   
         return menuLists;
     }
     private void initTabHost()  {
         if(tabHost != null) {
           
             tabHost.setup(mLocalActivity);
-            tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator("tab1").setContent(new Intent(this,ConversationsActivity.class)));
-            tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator("tab2").setContent(new Intent(this,AddFriendActivity.class)));
+            tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(getResources().getString(R.string.tab_chat)).setContent(new Intent(this,ConversationsActivity.class)));
+            tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(getResources().getString(R.string.tab_friend)).setContent(new Intent(this,AddFriendActivity.class)));
             tabHost.setCurrentTab(0);
         }
     }

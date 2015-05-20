@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="5dp"
+    android:paddingLeft="10dp"
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
     android:orientation="vertical" >
@@ -35,14 +35,19 @@
         android:drawableLeft="@drawable/setting_center"
         android:textColor="#ffffff"
         android:textSize="15sp" />
-	<ListView android:id="@+id/menus"
+	<ListView 
+	    android:id="@+id/menus"
+	    android:background="@color/deepskyblue"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_above="@id/menu_setting"
 	    android:layout_below="@id/self_center"
+	    android:layout_marginTop="10dp"
+	    android:layout_marginBottom="10dp"
 	    android:cacheColorHint="#00000000"
 	    android:divider="@null"
 	    android:scrollbars="none"
+	    android:dividerHeight="10dp"
         android:textColor="#ffffff">
 	</ListView>
 	
