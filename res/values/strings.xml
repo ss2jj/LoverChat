@@ -43,6 +43,9 @@
      <string name="item_add">添加朋友</string>
     <string name="item_sao">扫一扫</string>
     <string name="item_my">我的二维码</string>
+    <string name="conversion_name">UnKnow</string>
+    <string name="conversion_unread">未读消息</string>
+    <string name="conversation_time">13-01-09 15:29:11</string>
     <string name="title_activity_chat">ChatActivity</string>
     <string name="title_activity_conversations">ConversationsActivity</string>
     <string name="title_activity_add_friend">AddFriendActivity</string>

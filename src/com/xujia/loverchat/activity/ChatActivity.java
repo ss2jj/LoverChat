@@ -53,7 +53,7 @@ private View popwindowView;
         initleftMenu();
         initRightMore();
     }
-    //左边滑动菜单按钮
+    //左边滑动菜单按钮处理
     private void initleftMenu() {
         menuList = getData();
         menus.setAdapter(new SimpleAdapter(this, menuList, R.layout.menu_list,new String[]{"item","image"}, new int[]{R.id.menu_text,R.id.menu_imageView1}));
@@ -71,7 +71,7 @@ private View popwindowView;
         popWindow.setWidth(more.getMeasuredWidth());  
         popWindow.setHeight((more.getMeasuredHeight() + 20)  //设置popwindow的大小
                 * 3);  
-        popWindow.setBackgroundDrawable(new ColorDrawable(0000000000));
+        popWindow.setBackgroundDrawable(new ColorDrawable(0000000000));//必须设置 否则下面的设置不生效
         popWindow.setOutsideTouchable(true); //设置popwindow外触摸关闭popwindow
     }
     private List<Map<String,Object>> getData()  {
