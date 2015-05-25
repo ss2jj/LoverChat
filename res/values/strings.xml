@@ -40,6 +40,9 @@
     <string name="item_date">爱情日志</string>
     <string name="tab_chat">聊天</string>
     <string name="tab_friend">好友</string>
+     <string name="item_add">添加朋友</string>
+    <string name="item_sao">扫一扫</string>
+    <string name="item_my">我的二维码</string>
     <string name="title_activity_chat">ChatActivity</string>
     <string name="title_activity_conversations">ConversationsActivity</string>
     <string name="title_activity_add_friend">AddFriendActivity</string>
