@@ -22,13 +22,18 @@ import com.easemob.EMError;
 import com.easemob.analytics.EMMessageCollector;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatConfig.EMEnvMode;
+import com.easemob.chat.EMMessage.ChatType;
+import com.easemob.chat.EMMessage.Type;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatOptions;
+import com.easemob.chat.EMMessage;
 import com.easemob.chat.OnMessageNotifyListener;
 import com.easemob.chat.OnNotificationClickListener;
+import com.xujia.loverchat.utils.Utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
@@ -131,6 +136,7 @@ public  class HXSDKHelper {
      * logout HuanXin SDK
      */
     public void logout(final EMCallBack callback){
+             endCall();
               EMChatManager.getInstance().logout(new EMCallBack(){
 
             @Override
@@ -157,7 +163,13 @@ public  class HXSDKHelper {
             
         });
     }
-    
+    void endCall(){
+        try {
+            EMChatManager.getInstance().endCall();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * �?��是否已经登录�?     * @return
      */
@@ -170,14 +182,58 @@ public  class HXSDKHelper {
      * @return
      */
     protected OnMessageNotifyListener getMessageNotifyListener(){
-        return null;
+        // 取消注释，app在后台，有新消息来时，状态栏的消息提示换成自己写的
+        return new OnMessageNotifyListener() {
+            @Override
+            public String onNewMessageNotify(EMMessage message) {
+                // 设置状态栏的消息提示，可以根据message的类型做相应提示
+                String ticker = Utils.getMessageDigest(message, appContext);
+                if(message.getType() == Type.TXT)
+                    ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
+                return message.getFrom() + ": " + ticker;
+            }
+
+            @Override
+            public String onLatestMessageNotify(EMMessage message, int fromUsersNum, int messageNum) {
+                return null;
+               // return fromUsersNum + "个基友，发来了" + messageNum + "条消息";
+            }
+
+            @Override
+            public String onSetNotificationTitle(EMMessage message) {
+                //修改标题,这里使用默认
+                return null;
+            }
+
+            @Override
+            public int onSetSmallIcon(EMMessage message) {
+                //设置小图标
+                return 0;
+            }
+        };
     }
     
     /**
      *get notification click listener
      */
     protected OnNotificationClickListener getNotificationClickListener(){
-        return null;
+        return new OnNotificationClickListener() {
+
+            @Override
+            public Intent onNotificationClick(EMMessage message) {
+                Intent intent = new Intent();
+                ChatType chatType = message.getChatType();
+                if (chatType == ChatType.Chat) { // 单聊信息
+                    intent.putExtra("userId", message.getFrom());
+                //    intent.putExtra("chatType", ChatActivity.CHATTYPE_SINGLE);
+                } else { // 群聊信息
+                            // message.getTo()为群聊id
+                    intent.putExtra("groupId", message.getTo());
+              //      intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
+                }
+                return intent;
+            }
+        };
     }
 
     /**
@@ -208,13 +264,23 @@ public  class HXSDKHelper {
     /**
      * the developer can override this function to handle connection conflict error
      */
-    protected void onConnectionConflict(){}
+    protected void onConnectionConflict(){
+        Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("conflict", true);
+        appContext.startActivity(intent);
+    }
 
     
     /**
      * the developer can override this function to handle user is removed error
      */
-    protected void onCurrentAccountRemoved(){}
+    protected void onCurrentAccountRemoved(){
+        Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //intent.putExtra(Constant.ACCOUNT_REMOVED, true);
+        appContext.startActivity(intent);
+    }
     
     
     /**

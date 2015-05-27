@@ -46,6 +46,15 @@
     <string name="conversion_name">UnKnow</string>
     <string name="conversion_unread">未读消息</string>
     <string name="conversation_time">13-01-09 15:29:11</string>
+    <string name="notify_friend">待验证好友</string>
+    <string name="add_friend">添加好友</string>
+     <string name="location_recv">[%1$s location]</string>
+      <string name="location_prefix">[my location]</string>
+      <string name="voice">voice</string>
+    <string name="picture">[picture]</string>
+    <string name="video">[video]</string>
+    <string name="file">[file]</string>
+    <string name="voice_call">[voice call]</string>
     <string name="title_activity_chat">ChatActivity</string>
     <string name="title_activity_conversations">ConversationsActivity</string>
     <string name="title_activity_add_friend">AddFriendActivity</string>

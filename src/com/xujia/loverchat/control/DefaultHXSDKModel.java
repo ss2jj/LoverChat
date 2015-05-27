@@ -21,6 +21,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.xujia.loverchat.utils.Consts;
+import com.xujia.loverchat.utils.PreferenceUtils;
+
 /**
  * HuanXin default SDK Model implementation
  * @author easemob
@@ -39,58 +42,56 @@ public class DefaultHXSDKModel extends HXSDKModel{
     public void setSettingMsgNotification(boolean paramBoolean) {
         // TODO Auto-generated method stub
        // HXPreferenceUtils.getInstance().setSettingMsgNotification(paramBoolean);
+        PreferenceUtils.saveValue(Consts.msgNotification, paramBoolean?"true":"false", Consts.userPre);
     }
 
     @Override
     public boolean getSettingMsgNotification() {
         // TODO Auto-generated method stub
         //return HXPreferenceUtils.getInstance().getSettingMsgNotification();
-        return false;
+        return PreferenceUtils.getValue(Consts.msgNotification, "unknow", Consts.userPre).equals("true")?true:false;
     }
 
     @Override
     public void setSettingMsgSound(boolean paramBoolean) {
         // TODO Auto-generated method stub
-        //HXPreferenceUtils.getInstance().setSettingMsgSound(paramBoolean);
+        PreferenceUtils.saveValue(Consts.msgSound, paramBoolean?"true":"false", Consts.userPre);
     }
 
     @Override
     public boolean getSettingMsgSound() {
         // TODO Auto-generated method stub
-        //return HXPreferenceUtils.getInstance().getSettingMsgSound();
-        return false;
+        return PreferenceUtils.getValue(Consts.msgSound, "unknow", Consts.userPre).equals("true")?true:false;
     }
 
     @Override
     public void setSettingMsgVibrate(boolean paramBoolean) {
         // TODO Auto-generated method stub
-        //HXPreferenceUtils.getInstance().setSettingMsgVibrate(paramBoolean);
+        PreferenceUtils.saveValue(Consts.msgVibrate, paramBoolean?"true":"false", Consts.userPre);
     }
 
     @Override
     public boolean getSettingMsgVibrate() {
         // TODO Auto-generated method stub
-        //return HXPreferenceUtils.getInstance().getSettingMsgVibrate();
-        return false;
+        return PreferenceUtils.getValue(Consts.msgVibrate, "unknow", Consts.userPre).equals("true")?true:false;
     }
 
     @Override
     public void setSettingMsgSpeaker(boolean paramBoolean) {
         // TODO Auto-generated method stub
-      //  HXPreferenceUtils.getInstance().setSettingMsgSpeaker(paramBoolean);
+        PreferenceUtils.saveValue(Consts.msgSpeaker, paramBoolean?"true":"false", Consts.userPre);
     }
 
     @Override
     public boolean getSettingMsgSpeaker() {
         // TODO Auto-generated method stub
-        //return HXPreferenceUtils.getInstance().getSettingMsgSpeaker();
-        return false;
+        return PreferenceUtils.getValue(Consts.msgSpeaker, "unknow", Consts.userPre).equals("true")?true:false;
     }
 
     @Override
     public boolean getUseHXRoster() {
         // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override
