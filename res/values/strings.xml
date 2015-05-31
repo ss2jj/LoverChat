@@ -58,5 +58,13 @@
     <string name="title_activity_chat">ChatActivity</string>
     <string name="title_activity_conversations">ConversationsActivity</string>
     <string name="title_activity_add_friend">AddFriendActivity</string>
-
+	<string name="Remove_the_notification">账号移除</string>
+    <string name="ok">确定</string>
+    <string name="em_user_remove">您的账号已登出</string>
+    <string name="Logoff_notification">账号冲突</string>
+    <string name="connect_conflict">您的账号已在别处登陆</string>
+    <string name="friend_invitation_title">好友验证</string>
+     <string name="friend_invitation_message">请求加您为好友</string>
+     <string name="friend_invitation_accept">同意</string>
+     <string name="friend_invitation_refuse">拒绝</string>
 </resources>

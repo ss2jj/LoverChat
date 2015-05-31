@@ -4,7 +4,11 @@ package com.xujia.loverchat.activity;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.LocalActivityManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,12 +18,30 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TabHost;
+import android.widget.Toast;
 
+import com.easemob.EMConnectionListener;
+import com.easemob.EMError;
+import com.easemob.chat.CmdMessageBody;
+import com.easemob.chat.EMChat;
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMContactListener;
+import com.easemob.chat.EMContactManager;
+import com.easemob.chat.EMConversation;
+import com.easemob.chat.EMMessage;
+import com.easemob.chat.EMMessage.ChatType;
+import com.easemob.exceptions.EaseMobException;
+import com.easemob.util.EMLog;
+import com.easemob.util.NetUtils;
 import com.xujia.loverchat.R;
 import com.xujia.loverchat.R.layout;
 import com.xujia.loverchat.R.menu;
+import com.xujia.loverchat.control.HXSDKHelper;
+import com.xujia.loverchat.model.UserDao;
+import com.xujia.loverchat.utils.Utils;
 import com.xujia.loverchat.view.DragLayout;
 import com.xujia.loverchat.view.DragLayout.Status;
 
@@ -37,6 +59,13 @@ private ImageButton leftMenu,rightMore;
 private DragLayout dragLayout;
 private PopupWindow popWindow;
 private View popwindowView;
+private EMContactListener contactListener;
+private NewMessageBoradReceiver newMessageReceiver;
+// 账号在别处登录
+public boolean isConflict = false;
+//账号被移除
+private boolean isCurrentAccountRemoved = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +81,13 @@ private View popwindowView;
         initTabHost(savedInstanceState);
         initleftMenu();
         initRightMore();
+        initListener();
+        if (getIntent().getBooleanExtra("conflict", false) && !isConflictDialogShow){
+            showConflictDialog();
+        }else if(getIntent().getBooleanExtra("removed", false) && !isAccountRemovedDialogShow){
+            showAccountRemovedDialog();
+        }
+      
     }
     //左边滑动菜单按钮处理
     private void initleftMenu() {
@@ -126,6 +162,27 @@ private View popwindowView;
             tabHost.setCurrentTab(0);
         }
     }
+    private void initListener() {
+        newMessageReceiver =  new NewMessageBoradReceiver();
+        IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
+        intentFilter.setPriority(3);
+        registerReceiver(newMessageReceiver, intentFilter);
+     // 注册一个ack回执消息的BroadcastReceiver
+        IntentFilter ackMessageIntentFilter = new IntentFilter(EMChatManager.getInstance().getAckMessageBroadcastAction());
+        ackMessageIntentFilter.setPriority(3);
+        registerReceiver(ackMessageReceiver, ackMessageIntentFilter);
+        
+        //注册一个透传消息的BroadcastReceiver
+        IntentFilter cmdMessageIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
+        cmdMessageIntentFilter.setPriority(3);
+        registerReceiver(cmdMessageReceiver, cmdMessageIntentFilter);
+        contactListener =  new MyContactListener();
+        //监听联系人变化
+        EMContactManager.getInstance().setContactListener(contactListener);
+        // 注册一个监听连接状态的listener
+        EMChatManager.getInstance().addConnectionListener(new MyConnectionListener());
+        EMChat.getInstance().setAppInited();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -151,5 +208,285 @@ private View popwindowView;
             }
         }
     }
+    //接收新消息的广播
+    class NewMessageBoradReceiver extends BroadcastReceiver  {
+
+        @Override
+        public void onReceive(Context arg0, Intent arg1) {
+            // TODO Auto-generated method stub
+            String from = arg1.getStringExtra("from");
+            // 消息id
+            String msgId = arg1.getStringExtra("msgid");
+            EMMessage message = EMChatManager.getInstance().getMessage(msgId);
+            
+            // fix: logout crash， 如果正在接收大量消息
+            // 因为此时已经logout，消息队列已经被清空， broadcast延时收到，所以会出现message为空的情况
+            if (message == null) {
+                return;
+            }
+            abortBroadcast();
+            //刷新未读消息页面
+            ConversationsActivity.activityInstance. refershUI();
+        }
+        
+    }
+    //接收联系人变化的广播
+   class MyContactListener implements EMContactListener {
+
+    @Override
+    public void onContactAdded(List<String> arg0) {
+        // TODO Auto-generated method stub
+        for(String userName : arg0)
+        {
+            if(!UserDao.getInstance().getUser().contains(userName))
+            UserDao.getInstance().saveUser(userName);
+           ConversationsActivity.activityInstance. refershUI();
+        }
+    }
+
+    @Override
+    public void onContactAgreed(String arg0) {
+        // TODO Auto-generated method stub
+      
+            if(!UserDao.getInstance().getUser().contains(arg0))
+            UserDao.getInstance().saveUser(arg0);
+           ConversationsActivity.activityInstance. refershUI();
+      
+    }
+
+    @Override
+    public void onContactDeleted(List<String> arg0) {
+        // TODO Auto-generated method stub
+        for(String userName : arg0)
+        {
+            UserDao.getInstance().deleteUser(userName);
+            ConversationsActivity.activityInstance.refershUI();
+        }
+    }
+
+    @Override
+    public void onContactInvited(String arg0, String arg1) {
+        // TODO Auto-generated method stub
+        showFriendInvitation(arg0);
+    }
+
+    @Override
+    public void onContactRefused(String arg0) {
+        // TODO Auto-generated method stub
+        UserDao.getInstance().deleteUser(arg0);
+        ConversationsActivity.activityInstance.refershUI();
+    }
+       
+   }
+   
+   /**
+    * 消息回执BroadcastReceiver
+    */
+   private BroadcastReceiver ackMessageReceiver = new BroadcastReceiver() {
+
+       @Override
+       public void onReceive(Context context, Intent intent) {
+           abortBroadcast();
+           
+           String msgid = intent.getStringExtra("msgid");
+           String from = intent.getStringExtra("from");
+
+           EMConversation conversation = EMChatManager.getInstance().getConversation(from);
+           if (conversation != null) {
+               // 把message设为已读
+               EMMessage msg = conversation.getMessage(msgid);
+
+               if (msg != null) {
+                   msg.isAcked = true;
+               }
+           }
+           
+       }
+   };
+   
+   
+   
+   /**
+    * 透传消息BroadcastReceiver
+    */
+   private BroadcastReceiver cmdMessageReceiver = new BroadcastReceiver() {
+       
+       @Override
+       public void onReceive(Context context, Intent intent) {
+           abortBroadcast();
+           //获取cmd message对象
+           String msgId = intent.getStringExtra("msgid");
+           EMMessage message = intent.getParcelableExtra("message");
+           //获取消息body
+           CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
+           String action = cmdMsgBody.action;//获取自定义action
+           
+           //获取扩展属性 此处省略
+//         message.getStringAttribute("");
+       }
+   };
+
+   private class MyConnectionListener implements EMConnectionListener {
+
+       @Override
+       public void onConnected() {
+           runOnUiThread(new Runnable() {
+
+               @Override
+               public void run() {
+                  // chatHistoryFragment.errorItem.setVisibility(View.GONE);
+               }
+
+           });
+       }
+
+       @Override
+       public void onDisconnected(final int error) {
+           runOnUiThread(new Runnable() {
+               
+               @Override
+               public void run() {
+                   if(error == EMError.USER_REMOVED){
+                       // 显示帐号已经被移除
+                       showAccountRemovedDialog();
+                   }else if (error == EMError.CONNECTION_CONFLICT) {
+                       // 显示帐号在其他设备登陆dialog
+                       showConflictDialog();
+                   } else {
+                    //  chatHistoryFragment.errorItem.setVisibility(View.VISIBLE);
+                       if (Utils.isNetworkActive())
+                            Utils.showToast(getResources().getString(R.string.network_unavaible));
+                   }
+               }
+
+           });
+       }
+   }
+   private android.app.AlertDialog.Builder conflictBuilder;
+   private android.app.AlertDialog.Builder accountRemovedBuilder;
+   private boolean isConflictDialogShow;
+   private boolean isAccountRemovedDialogShow;
+   /**
+    * 显示帐号在别处登录dialog
+    */
+   private void showConflictDialog() {
+       isConflictDialogShow = true;
+       HXSDKHelper.getInstance().logout(null);
+       String st = getResources().getString(R.string.Logoff_notification);
+       if (!ChatActivity.this.isFinishing()) {
+           // clear up global variables
+           try {
+               if (conflictBuilder == null)
+                   conflictBuilder = new android.app.AlertDialog.Builder(ChatActivity.this);
+               conflictBuilder.setTitle(st);
+               conflictBuilder.setMessage(R.string.connect_conflict);
+               conflictBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+                   @Override
+                   public void onClick(DialogInterface dialog, int which) {
+                       dialog.dismiss();
+                       conflictBuilder = null;
+                       finish();
+                       startActivity(new Intent(ChatActivity.this, LoginActivity.class));
+                   }
+               });
+               conflictBuilder.setCancelable(false);
+               conflictBuilder.create().show();
+               isConflict = true;
+           } catch (Exception e) {
+               //EMLog.e(TAG, "---------color conflictBuilder error" + e.getMessage());
+           }
+
+       }
+
+   }
+   
+   /**
+    * 帐号被移除的dialog
+    */
+   private void showAccountRemovedDialog() {
+       isAccountRemovedDialogShow = true;
+       HXSDKHelper.getInstance().logout(null);
+       String st5 = getResources().getString(R.string.Remove_the_notification);
+       if (!ChatActivity.this.isFinishing()) {
+           // clear up global variables
+           try {
+               if (accountRemovedBuilder == null)
+                   accountRemovedBuilder = new android.app.AlertDialog.Builder(ChatActivity.this);
+               accountRemovedBuilder.setTitle(st5);
+               accountRemovedBuilder.setMessage(R.string.em_user_remove);
+               accountRemovedBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+                   @Override
+                   public void onClick(DialogInterface dialog, int which) {
+                       dialog.dismiss();
+                       accountRemovedBuilder = null;
+                       finish();
+                       startActivity(new Intent(ChatActivity.this, LoginActivity.class));
+                   }
+               });
+               accountRemovedBuilder.setCancelable(false);
+               accountRemovedBuilder.create().show();
+               isCurrentAccountRemoved = true;
+           } catch (Exception e) {
+               //EMLog.e(TAG, "---------color userRemovedBuilder error" + e.getMessage());
+           }
+
+       }
+
+   }
+   //显示拒绝或者统一好友邀请
+   public void showFriendInvitation(final String username)   {
+       if (!ChatActivity.this.isFinishing()) {
+       android.app.AlertDialog.Builder friendInvitationBuilder = new android.app.AlertDialog.Builder(ChatActivity.this);
+       friendInvitationBuilder.setTitle(R.string.friend_invitation_title);
+       friendInvitationBuilder.setMessage(username+getResources().getString(R.string.friend_invitation_message));
+       friendInvitationBuilder.setCancelable(false);
+       friendInvitationBuilder.setPositiveButton(getResources().getString(R.string.friend_invitation_accept), new DialogInterface.OnClickListener() {
+        
+        @Override
+        public void onClick(DialogInterface arg0, int arg1) {
+            // TODO Auto-generated method stub
+            try {
+                EMChatManager.getInstance().acceptInvitation(username);
+                arg0.dismiss();
+            } catch (EaseMobException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    });
+       friendInvitationBuilder.setNegativeButton(R.string.friend_invitation_refuse, new DialogInterface.OnClickListener() {
+        
+        @Override
+        public void onClick(DialogInterface arg0, int arg1) {
+            // TODO Auto-generated method stub
+            try {
+                EMChatManager.getInstance().refuseInvitation(username);
+                arg0.dismiss();
+            } catch (EaseMobException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    });
+       friendInvitationBuilder.create().show();
+       }
+   }
+   @Override
+   protected void onNewIntent(Intent intent) {
+       super.onNewIntent(intent);
+       if (getIntent().getBooleanExtra("conflict", false) && !isConflictDialogShow){
+           showConflictDialog();
+       }else if(getIntent().getBooleanExtra("removed", false) && !isAccountRemovedDialogShow){
+           showAccountRemovedDialog();
+       }
+   }
+   @Override
+   protected void onSaveInstanceState(Bundle outState) {
+       outState.putBoolean("isConflict", isConflict);
+       outState.putBoolean("removed", isCurrentAccountRemoved);
+       super.onSaveInstanceState(outState);
+   }
 
 }
