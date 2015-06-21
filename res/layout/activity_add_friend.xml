@@ -39,9 +39,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/seperate"
+        android:orientation="vertical">
+  	<LinearLayout
+        android:id="@+id/add_friend_show"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="10dp" >
-
         <ImageView
             android:id="@+id/add"
             android:layout_width="wrap_content"
@@ -56,8 +60,26 @@
             android:layout_marginLeft="10dp"
             android:text="@string/add_friend"
             android:textSize="13sp" />
+         </LinearLayout>
+        <LinearLayout android:id="@+id/add_friend_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:layout_marginLeft="10dp">
+            <EditText android:id="@+id/add_friend_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="添加好友"
+                />
+            <Button android:id="@+id/add_friend_action"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="添加"/>
+        </LinearLayout>
     </LinearLayout>
-    
     <View
         android:id="@+id/seperate1"
         android:layout_width="match_parent"

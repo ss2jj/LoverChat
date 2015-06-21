@@ -3,6 +3,7 @@ package com.xujia.loverchat.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.easemob.chat.EMMessage;
@@ -12,7 +13,7 @@ import com.xujia.loverchat.control.BaseApplication;
 
 public class Utils {
 
-    
+    private static boolean DEBUG = true;
     /*
      * 显示toast
      */
@@ -75,7 +76,13 @@ public class Utils {
 
         return digest;
     }
-    static String getString(Context context, int resId){
+   public  static String getString(Context context, int resId){
         return context.getResources().getString(resId);
     }
+   
+  public static void  printLog(String message)    {
+      if(DEBUG) {
+          Log.i("LoverChat", message);
+      }
+  }
 }

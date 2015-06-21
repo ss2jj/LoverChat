@@ -9,6 +9,7 @@ public static final String msgSound = "msgSound";
 public static final String msgVibrate = "msgVibrate";
 public static final String msgSpeaker = "msgSpeaker";
 public static final String MESSAGE_ATTR_IS_VOICE_CALL = "is_voice_call";
-public static String USER_TABLE_NAME = "user";
-public static String USERNAME = "username";
+public static final String USER_TABLE_NAME = "user";
+public static final String USERNAME = "username";
+public static final String TAG = "LoverChat";
 }

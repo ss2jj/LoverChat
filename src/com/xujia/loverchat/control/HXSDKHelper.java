@@ -72,9 +72,9 @@ public  class HXSDKHelper {
         EMChat.getInstance().init(context);
         
         // 设置sandbox测试环境
-        if(hxModel.isSandboxMode()){
-         EMChat.getInstance().setEnv(EMEnvMode.EMSandboxMode);
-        }
+      //  if(hxModel.isSandboxMode()){
+      //   EMChat.getInstance().setEnv(EMEnvMode.EMSandboxMode);
+       // }
          // set debug mode in development process
         if(hxModel.isDebugMode())   {
         EMChat.getInstance().setDebugMode(true);    
@@ -136,7 +136,7 @@ public  class HXSDKHelper {
      * logout HuanXin SDK
      */
     public void logout(final EMCallBack callback){
-             endCall();
+          //   endCall();
               EMChatManager.getInstance().logout(new EMCallBack(){
 
             @Override

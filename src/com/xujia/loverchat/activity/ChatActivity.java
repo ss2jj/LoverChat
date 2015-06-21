@@ -10,11 +10,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -59,13 +62,13 @@ private ImageButton leftMenu,rightMore;
 private DragLayout dragLayout;
 private PopupWindow popWindow;
 private View popwindowView;
-private EMContactListener contactListener;
+private static String TAG = "ChatActivity";
 private NewMessageBoradReceiver newMessageReceiver;
 // 账号在别处登录
 public boolean isConflict = false;
 //账号被移除
 private boolean isCurrentAccountRemoved = false;
-
+private EMConnectionListener connectionListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,10 +92,21 @@ private boolean isCurrentAccountRemoved = false;
         }
       
     }
+    
+    @Override
+        protected void onDestroy() {
+            // TODO Auto-generated method stub
+            super.onDestroy();
+            EMChatManager.getInstance().removeConnectionListener(connectionListener);
+            unregisterReceiver(cmdMessageReceiver);
+            unregisterReceiver(ackMessageReceiver);
+            unregisterReceiver(newMessageReceiver);
+        }
     //左边滑动菜单按钮处理
     private void initleftMenu() {
         menuList = getData();
         menus.setAdapter(new SimpleAdapter(this, menuList, R.layout.menu_list,new String[]{"item","image"}, new int[]{R.id.menu_text,R.id.menu_imageView1}));
+        menus.setOnItemClickListener(new MyItemClickListener());
     }
     //右边更多按钮菜单处理
     private void initRightMore()    {
@@ -176,11 +190,10 @@ private boolean isCurrentAccountRemoved = false;
         IntentFilter cmdMessageIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
         cmdMessageIntentFilter.setPriority(3);
         registerReceiver(cmdMessageReceiver, cmdMessageIntentFilter);
-        contactListener =  new MyContactListener();
-        //监听联系人变化
-        EMContactManager.getInstance().setContactListener(contactListener);
+      
         // 注册一个监听连接状态的listener
-        EMChatManager.getInstance().addConnectionListener(new MyConnectionListener());
+        connectionListener =  new MyConnectionListener();
+        EMChatManager.getInstance().addConnectionListener(connectionListener);
         EMChat.getInstance().setAppInited();
     }
     @Override
@@ -208,6 +221,38 @@ private boolean isCurrentAccountRemoved = false;
             }
         }
     }
+    
+    //listview item 点击监听
+    class  MyItemClickListener implements OnItemClickListener   {
+
+        @Override
+        public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+            // TODO Auto-generated method stub
+           switch (arg2) {
+            case 0:
+                
+                break;
+            case 1:
+                
+                break;
+            case 2:
+     
+                break;
+            case 3:
+                break;
+            case 4:
+                Utils.printLog("logout");
+                HXSDKHelper.getInstance().logout(null);
+                Intent intent = new Intent(ChatActivity.this,LoginActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            default:
+                break;
+        }
+        }
+        
+    }
     //接收新消息的广播
     class NewMessageBoradReceiver extends BroadcastReceiver  {
 
@@ -230,54 +275,7 @@ private boolean isCurrentAccountRemoved = false;
         }
         
     }
-    //接收联系人变化的广播
-   class MyContactListener implements EMContactListener {
-
-    @Override
-    public void onContactAdded(List<String> arg0) {
-        // TODO Auto-generated method stub
-        for(String userName : arg0)
-        {
-            if(!UserDao.getInstance().getUser().contains(userName))
-            UserDao.getInstance().saveUser(userName);
-           ConversationsActivity.activityInstance. refershUI();
-        }
-    }
-
-    @Override
-    public void onContactAgreed(String arg0) {
-        // TODO Auto-generated method stub
-      
-            if(!UserDao.getInstance().getUser().contains(arg0))
-            UserDao.getInstance().saveUser(arg0);
-           ConversationsActivity.activityInstance. refershUI();
-      
-    }
-
-    @Override
-    public void onContactDeleted(List<String> arg0) {
-        // TODO Auto-generated method stub
-        for(String userName : arg0)
-        {
-            UserDao.getInstance().deleteUser(userName);
-            ConversationsActivity.activityInstance.refershUI();
-        }
-    }
-
-    @Override
-    public void onContactInvited(String arg0, String arg1) {
-        // TODO Auto-generated method stub
-        showFriendInvitation(arg0);
-    }
-
-    @Override
-    public void onContactRefused(String arg0) {
-        // TODO Auto-generated method stub
-        UserDao.getInstance().deleteUser(arg0);
-        ConversationsActivity.activityInstance.refershUI();
-    }
-       
-   }
+  
    
    /**
     * 消息回执BroadcastReceiver
@@ -435,44 +433,7 @@ private boolean isCurrentAccountRemoved = false;
        }
 
    }
-   //显示拒绝或者统一好友邀请
-   public void showFriendInvitation(final String username)   {
-       if (!ChatActivity.this.isFinishing()) {
-       android.app.AlertDialog.Builder friendInvitationBuilder = new android.app.AlertDialog.Builder(ChatActivity.this);
-       friendInvitationBuilder.setTitle(R.string.friend_invitation_title);
-       friendInvitationBuilder.setMessage(username+getResources().getString(R.string.friend_invitation_message));
-       friendInvitationBuilder.setCancelable(false);
-       friendInvitationBuilder.setPositiveButton(getResources().getString(R.string.friend_invitation_accept), new DialogInterface.OnClickListener() {
-        
-        @Override
-        public void onClick(DialogInterface arg0, int arg1) {
-            // TODO Auto-generated method stub
-            try {
-                EMChatManager.getInstance().acceptInvitation(username);
-                arg0.dismiss();
-            } catch (EaseMobException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-    });
-       friendInvitationBuilder.setNegativeButton(R.string.friend_invitation_refuse, new DialogInterface.OnClickListener() {
-        
-        @Override
-        public void onClick(DialogInterface arg0, int arg1) {
-            // TODO Auto-generated method stub
-            try {
-                EMChatManager.getInstance().refuseInvitation(username);
-                arg0.dismiss();
-            } catch (EaseMobException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-    });
-       friendInvitationBuilder.create().show();
-       }
-   }
+
    @Override
    protected void onNewIntent(Intent intent) {
        super.onNewIntent(intent);

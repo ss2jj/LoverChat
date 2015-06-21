@@ -125,7 +125,7 @@ public class LoginActivity extends Activity {
             if(!LoginActivity.this.isFinishing())   {
                 pd.dismiss();
                 //跳转
-               // startActivity(new Intent());
+               startActivity(new Intent(LoginActivity.this,ChatActivity.class));
                 runOnUiThread(new Runnable() {
                     
                     @Override

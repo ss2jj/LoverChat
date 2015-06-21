@@ -107,18 +107,19 @@ private boolean showProgress =false;
                         if(!RegisterActivity.this.isFinishing())    {
                             pd.dismiss();
                          }
+                        int errorCode=e.getErrorCode();
+                        if(errorCode==EMError.NONETWORK_ERROR){
+                            Utils.showToast(getString(R.string.network_unavaible));
+                        }else if(errorCode==EMError.USER_ALREADY_EXISTS){
+                            Utils.showToast(getString(R.string.user_conflict));
+                        }else if(errorCode==EMError.UNAUTHORIZED){
+                            Utils.showToast(getString(R.string.register_fail));
+                        }else{
+                            Utils.showToast(getString(R.string.register_fail)+e.getMessage());
+                      }
                     }
                 });
-              int errorCode=e.getErrorCode();
-              if(errorCode==EMError.NONETWORK_ERROR){
-                  Utils.showToast(getString(R.string.network_unavaible));
-              }else if(errorCode==EMError.USER_ALREADY_EXISTS){
-                  Utils.showToast(getString(R.string.user_conflict));
-              }else if(errorCode==EMError.UNAUTHORIZED){
-                  Utils.showToast(getString(R.string.register_fail));
-              }else{
-                  Utils.showToast(getString(R.string.register_fail)+e.getMessage());
-            }
+            
          }
           } }).start();
     }

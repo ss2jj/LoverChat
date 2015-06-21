@@ -47,7 +47,7 @@ public abstract class HXSDKModel {
      * @return
      */
     public boolean getAcceptInvitationAlways(){
-        return true;
+        return false;
     }
     
     /**
