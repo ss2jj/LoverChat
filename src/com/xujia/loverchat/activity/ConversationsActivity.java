@@ -23,7 +23,10 @@ import com.xujia.loverchat.R;
 import com.xujia.loverchat.R.layout;
 import com.xujia.loverchat.R.menu;
 import com.xujia.loverchat.model.UserDao;
+import com.xujia.loverchat.utils.Consts;
+import com.xujia.loverchat.utils.Utils;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class ConversationsActivity extends Activity {
@@ -33,7 +36,11 @@ public class ConversationsActivity extends Activity {
     private TextView userNameText,unReadMessageText,unReadMessageTimeText;
     private static final int REFERSH_UI =0;
     public static ConversationsActivity activityInstance;
-    
+    public Handler hander =  new Handler()  {
+        public void handleMessage(android.os.Message msg) {
+             refershUI();
+        };
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,10 +52,18 @@ public class ConversationsActivity extends Activity {
         activityInstance = this;
         refershUI();
     }
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        Utils.printLog("ConversationsActivity onresume");
+         refershUI();
+        super.onResume();
+    }
+  
 public void refershUI() {
-   
-    if((userName=UserDao.getInstance().getUser())!= null)
+    HashMap<String,String> user = UserDao.getInstance().getUser();
+    if(user!= null && user.get(Consts.USERNAME) != null && user.get(Consts.VALIDATE).equals("yes")) 
     {
+        userName = user.get(Consts.USERNAME);
         conversionFriend.setVisibility(View.VISIBLE);
         userNameText.setText(userName);
         EMConversation conversation = EMChatManager.getInstance().getConversation(userName);

@@ -101,6 +101,7 @@ private EMConnectionListener connectionListener;
             unregisterReceiver(cmdMessageReceiver);
             unregisterReceiver(ackMessageReceiver);
             unregisterReceiver(newMessageReceiver);
+            EMContactManager.getInstance().removeContactListener();
         }
     //左边滑动菜单按钮处理
     private void initleftMenu() {
@@ -194,6 +195,10 @@ private EMConnectionListener connectionListener;
         // 注册一个监听连接状态的listener
         connectionListener =  new MyConnectionListener();
         EMChatManager.getInstance().addConnectionListener(connectionListener);
+        
+        //注册添加好友监听
+        EMContactManager.getInstance().setContactListener(new MyContactListener());
+        Utils.printLog("initListener  ");
         EMChat.getInstance().setAppInited();
     }
     @Override
@@ -276,6 +281,12 @@ private EMConnectionListener connectionListener;
         
     }
   
+    @Override
+        protected void onPause() {
+            // TODO Auto-generated method stub
+        Utils.printLog("chatactivity onPause  ");
+            super.onPause();
+        }
    
    /**
     * 消息回执BroadcastReceiver
@@ -301,9 +312,7 @@ private EMConnectionListener connectionListener;
            
        }
    };
-   
-   
-   
+    
    /**
     * 透传消息BroadcastReceiver
     */
@@ -323,7 +332,108 @@ private EMConnectionListener connectionListener;
 //         message.getStringAttribute("");
        }
    };
+   
+   
+ //接收联系人变化的广播
+   class MyContactListener implements EMContactListener {
 
+    @Override
+    public void onContactAdded(List<String> arg0) {
+        // TODO Auto-generated method stub
+        Utils.printLog("onContactAdded  "+arg0);
+    }
+
+    @Override
+    public void onContactAgreed(String arg0) {
+        // TODO Auto-generated method stub
+      
+        Utils.printLog("onContactAgreed  "+arg0);
+         UserDao.getInstance().updateUser(arg0, "yes");
+         // refershUI();
+         AddFriendActivity.activityInstance.hander.sendEmptyMessage(0);
+           ConversationsActivity.activityInstance. hander.sendEmptyMessage(0);
+      
+    }
+
+    @Override
+    public void onContactDeleted(List<String> arg0) {
+        // TODO Auto-generated method stub
+    
+        Utils.printLog("onContactDeleted  ");
+        for(String userName : arg0)
+        {
+            UserDao.getInstance().deleteUser(userName);
+           // refershUI();
+            AddFriendActivity.activityInstance.hander.sendEmptyMessage(0);
+            ConversationsActivity.activityInstance. hander.sendEmptyMessage(0);
+        }
+    }
+
+    @Override
+    public void onContactInvited(String arg0, String arg1) {
+        // TODO Auto-generated method stub
+        Utils.printLog( "onContactInvited " +arg0);
+        final String userName = arg0;
+        runOnUiThread(new Runnable() {
+            
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                showFriendInvitation(userName);
+            }
+        });
+      
+    }
+
+    @Override
+    public void onContactRefused(String arg0) {
+        // TODO Auto-generated method stub
+        Utils.printLog( "onContactRefused " +arg0);
+        UserDao.getInstance().deleteUser(arg0);
+      //  refershUI();
+        AddFriendActivity.activityInstance.hander.sendEmptyMessage(0);
+        ConversationsActivity.activityInstance. hander.sendEmptyMessage(0);
+    }
+       
+   }
+   //显示拒绝或者统一好友邀请
+   public void showFriendInvitation(final String username)   {
+       if (!ChatActivity.this.isFinishing()) {
+       android.app.AlertDialog.Builder friendInvitationBuilder = new android.app.AlertDialog.Builder(ChatActivity.this);
+       friendInvitationBuilder.setTitle(R.string.friend_invitation_title);
+       friendInvitationBuilder.setMessage(username+getResources().getString(R.string.friend_invitation_message));
+       friendInvitationBuilder.setCancelable(false);
+       friendInvitationBuilder.setPositiveButton(getResources().getString(R.string.friend_invitation_accept), new DialogInterface.OnClickListener() {
+        
+        @Override
+        public void onClick(DialogInterface arg0, int arg1) {
+            // TODO Auto-generated method stub
+            try {
+                EMChatManager.getInstance().acceptInvitation(username);
+                arg0.dismiss();
+            } catch (EaseMobException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    });
+       friendInvitationBuilder.setNegativeButton(R.string.friend_invitation_refuse, new DialogInterface.OnClickListener() {
+        
+        @Override
+        public void onClick(DialogInterface arg0, int arg1) {
+            // TODO Auto-generated method stub
+            try {
+                EMChatManager.getInstance().refuseInvitation(username);
+                arg0.dismiss();
+            } catch (EaseMobException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    });
+       friendInvitationBuilder.create().show();
+       }
+   }
    private class MyConnectionListener implements EMConnectionListener {
 
        @Override

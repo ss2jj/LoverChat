@@ -13,7 +13,8 @@ public class DbOpenHelper extends SQLiteOpenHelper {
     private static DbOpenHelper openHelper;
     private static final String USERNAME_TABLE_CREATE = "CREATE TABLE "
             + Consts.USER_TABLE_NAME + " ("
-            + Consts.USERNAME + " TEXT);";
+            + Consts.USERNAME + " TEXT,"
+            + Consts.VALIDATE + " TEXT);";
  
     private DbOpenHelper(Context context) {
         super(context, "chat.db", null, DB_VERSION);

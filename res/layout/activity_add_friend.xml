@@ -3,9 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddFriendActivity" >
-
-    <LinearLayout
+ <LinearLayout
         android:id="@+id/validate_friend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    <LinearLayout
+        android:id="@+id/validate_friends"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -25,6 +29,30 @@
             android:layout_marginLeft="10dp"
             android:text="@string/notify_friend"
             android:textSize="13sp" />
+		 </LinearLayout>
+        <LinearLayout
+            android:id="@+id/validate_friend_view"
+            android:layout_width="match_parent"
+           
+            android:layout_marginLeft="10dp"
+             android:layout_height="55dp"
+            android:orientation="horizontal"
+            android:visibility="gone" >
+
+            <ImageView
+                android:id="@+id/validate_friend_head"
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/image_touxiang" />
+
+            <TextView
+                android:id="@+id/validate_friend_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2" />
+       
+    </LinearLayout>
     </LinearLayout>
 
     <View
@@ -39,52 +67,88 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/seperate"
-        android:orientation="vertical">
-  	<LinearLayout
-        android:id="@+id/add_friend_show"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp" >
-        <ImageView
-            android:id="@+id/add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/nearby_bind_mobile_headerview_icon" />
+        android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/add_friend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:text="@string/add_friend"
-            android:textSize="13sp" />
-         </LinearLayout>
-        <LinearLayout android:id="@+id/add_friend_view"
+        <LinearLayout
+            android:id="@+id/add_friend_show"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="gone"
-            android:layout_marginLeft="10dp">
-            <EditText android:id="@+id/add_friend_name"
+            android:padding="10dp" >
+
+            <ImageView
+                android:id="@+id/add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/nearby_bind_mobile_headerview_icon" />
+
+            <TextView
+                android:id="@+id/add_friend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:text="@string/add_friend"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/add_friend_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal"
+            android:visibility="gone" >
+
+            <EditText
+                android:id="@+id/add_friend_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:hint="添加好友"
-                />
-            <Button android:id="@+id/add_friend_action"
+                android:hint="添加好友" />
+
+            <Button
+                android:id="@+id/add_friend_action"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="添加"/>
+                android:text="添加" />
         </LinearLayout>
     </LinearLayout>
+
     <View
         android:id="@+id/seperate1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/add_friend"
+        android:background="@drawable/line_addmore" />
+
+    <LinearLayout
+        android:id="@+id/friendlist"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@id/seperate1"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/friendlsit_head"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/image_touxiang" />
+
+        <TextView
+            android:id="@+id/friendlist_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/seperate2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/friendlist"
         android:background="@drawable/line_addmore" />
 
 </RelativeLayout>
