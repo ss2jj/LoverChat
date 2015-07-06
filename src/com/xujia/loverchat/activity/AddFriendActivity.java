@@ -25,6 +25,7 @@ import com.xujia.loverchat.R.layout;
 import com.xujia.loverchat.R.menu;
 import com.xujia.loverchat.model.UserDao;
 import com.xujia.loverchat.utils.Consts;
+import com.xujia.loverchat.utils.PreferenceUtils;
 import com.xujia.loverchat.utils.Utils;
 
 import java.util.HashMap;
@@ -121,6 +122,11 @@ public Handler hander =  new Handler()  {
                 HashMap<String,String> user = UserDao.getInstance().getUser();
                 if(user != null)    {
                     Utils.showToast("仅允许添加一位好友 请先删除");
+                    return;
+                }
+                //不允许添加自己为好友
+                if(userName.equals(PreferenceUtils.getValue(Consts.userName, "", Consts.userPre))) {
+                    Utils.showToast("不允许添加自己为好友");
                     return;
                 }
                 new Thread(new Runnable() {

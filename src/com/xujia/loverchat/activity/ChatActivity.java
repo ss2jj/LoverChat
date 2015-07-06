@@ -416,6 +416,9 @@ private EMConnectionListener connectionListener;
             // TODO Auto-generated method stub
             try {
                 EMChatManager.getInstance().acceptInvitation(username);
+                UserDao.getInstance().saveUser(username, "yes");
+                AddFriendActivity.activityInstance.hander.sendEmptyMessage(0);
+                  ConversationsActivity.activityInstance. hander.sendEmptyMessage(0);
                 arg0.dismiss();
             } catch (EaseMobException e) {
                 // TODO Auto-generated catch block

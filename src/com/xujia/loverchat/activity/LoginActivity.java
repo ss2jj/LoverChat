@@ -128,7 +128,7 @@ public class LoginActivity extends Activity {
             try {
                 //登陆时获取好友关系并保存到本地数据库
                 List<String> usernames =  EMContactManager.getInstance().getContactUserNames();
-                if(usernames != null) {
+                if(usernames != null && usernames.size()>0 ) {
                     UserDao.getInstance().saveUser(usernames.get(0), "yes");
                 }
             } catch (EaseMobException e1) {
