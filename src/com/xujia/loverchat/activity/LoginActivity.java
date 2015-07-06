@@ -20,14 +20,19 @@ import android.widget.Toast;
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMContactManager;
 import com.easemob.chat.EMGroupManager;
+import com.easemob.exceptions.EaseMobException;
 import com.xujia.loverchat.R;
 import com.xujia.loverchat.R.layout;
 import com.xujia.loverchat.R.menu;
 import com.xujia.loverchat.control.HXSDKHelper;
+import com.xujia.loverchat.model.UserDao;
 import com.xujia.loverchat.utils.Consts;
 import com.xujia.loverchat.utils.PreferenceUtils;
 import com.xujia.loverchat.utils.Utils;
+
+import java.util.List;
 
 public class LoginActivity extends Activity {
     private EditText userNameEdit;
@@ -117,8 +122,19 @@ public class LoginActivity extends Activity {
             runOnUiThread(new Runnable() {
                 public void run() {
                     pd.setMessage(getString(R.string.is_geting_info));
+                
                 }
             });
+            try {
+                //登陆时获取好友关系并保存到本地数据库
+                List<String> usernames =  EMContactManager.getInstance().getContactUserNames();
+                if(usernames != null) {
+                    UserDao.getInstance().saveUser(usernames.get(0), "yes");
+                }
+            } catch (EaseMobException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
             EMChatManager.getInstance().getAllConversations();
             EMGroupManager.getInstance().loadAllGroups();
             EMChatManager.getInstance().updateCurrentUserNick(userName);

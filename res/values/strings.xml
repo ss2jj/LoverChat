@@ -67,4 +67,8 @@
      <string name="friend_invitation_message">请求加您为好友</string>
      <string name="friend_invitation_accept">同意</string>
      <string name="friend_invitation_refuse">拒绝</string>
+     <string name="friend_list_title">删除好友</string>
+     <string name="friend_list_delete">确认删除</string>
+     <string name="friend_list_accept">确认</string>
+     <string name="friend_list_refuse">取消</string>
 </resources>

@@ -44,6 +44,7 @@ import com.xujia.loverchat.R.layout;
 import com.xujia.loverchat.R.menu;
 import com.xujia.loverchat.control.HXSDKHelper;
 import com.xujia.loverchat.model.UserDao;
+import com.xujia.loverchat.utils.Consts;
 import com.xujia.loverchat.utils.Utils;
 import com.xujia.loverchat.view.DragLayout;
 import com.xujia.loverchat.view.DragLayout.Status;
@@ -247,6 +248,11 @@ private EMConnectionListener connectionListener;
                 break;
             case 4:
                 Utils.printLog("logout");
+                //删除本人的数据库信息 以修复新登录的账户联系人信息没有更新
+                HashMap<String,String> user = UserDao.getInstance().getUser();
+                if(user != null)    {
+                    UserDao.getInstance().deleteUser(UserDao.getInstance().getUser().get(Consts.USERNAME));
+                }
                 HXSDKHelper.getInstance().logout(null);
                 Intent intent = new Intent(ChatActivity.this,LoginActivity.class);
                 startActivity(intent);

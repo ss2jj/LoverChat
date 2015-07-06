@@ -129,7 +129,8 @@
         android:layout_height="55dp"
         android:layout_marginLeft="10dp"
         android:layout_below="@id/seperate1"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:visibility="gone" >
 
         <ImageView
             android:id="@+id/friendlsit_head"
