@@ -70,6 +70,7 @@ public boolean isConflict = false;
 //账号被移除
 private boolean isCurrentAccountRemoved = false;
 private EMConnectionListener connectionListener;
+public static final String COPY_IMAGE = "EASEMOBIMG";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -65,6 +65,10 @@
             android:name="com.xujia.loverchat.activity.AddFriendActivity"
             android:label="@string/title_activity_add_friend" >
         </activity>
+        <activity
+            android:name="com.xujia.loverchat.activity.ConversationListActivity"
+            android:label="@string/title_activity_conversation_list" >
+        </activity>
     </application>
 
 </manifest>

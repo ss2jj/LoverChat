@@ -29,7 +29,7 @@ import com.xujia.loverchat.utils.Utils;
 import java.util.HashMap;
 import java.util.List;
 
-public class ConversationsActivity extends Activity {
+public class ConversationsActivity extends Activity implements View.OnClickListener{
     private RelativeLayout conversionFriend;
 
     private String userName = null;
@@ -49,6 +49,7 @@ public class ConversationsActivity extends Activity {
         userNameText = (TextView) findViewById(R.id.conversion_name);
         unReadMessageText = (TextView) findViewById(R.id.conversion_unread);
         unReadMessageTimeText = (TextView) findViewById(R.id.conversation_time);
+        conversionFriend.setOnClickListener(this);
         activityInstance = this;
         refershUI();
     }
@@ -85,13 +86,15 @@ public void refershUI() {
   
    
 }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.conversations, menu);
-        return true;
+@Override
+public void onClick(View arg0) {
+    // TODO Auto-generated method stub
+    if(arg0.getId() == R.id.conversion_freind && conversionFriend.isShown())   {
+        startActivity(new Intent(ConversationsActivity.this,ConversationListActivity.class));
+        finish();
     }
+}
+
 
    
 
