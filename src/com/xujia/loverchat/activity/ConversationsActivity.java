@@ -90,7 +90,9 @@ public void refershUI() {
 public void onClick(View arg0) {
     // TODO Auto-generated method stub
     if(arg0.getId() == R.id.conversion_freind && conversionFriend.isShown())   {
-        startActivity(new Intent(ConversationsActivity.this,ConversationListActivity.class));
+        Intent intent = new Intent(ConversationsActivity.this,ConversationListActivity.class);
+        intent.putExtra("username", userNameText.getText().toString());
+        startActivity(intent);
         finish();
     }
 }
