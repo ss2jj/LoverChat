@@ -82,5 +82,12 @@
     <string name="attach_voice_call">语音通话</string>
     <string name="attach_video_call">视频通话</string>
     <string name="title_activity_conversation_list">ConversationListActivity</string>
-
+ 	<string name="text_ack_msg">已读</string>
+     <string name="text_delivered_msg">送达</string>
+     <string name="confirm_resend">确认重发</string>
+     <string name="resend">重发</string>
+     <string name="Into_the_blacklist">加入黑名单</string>
+     <string name="send_fail">发送失败</string>
+     <string name="connect_failuer_toast">连接失败</string>
+    
 </resources>
