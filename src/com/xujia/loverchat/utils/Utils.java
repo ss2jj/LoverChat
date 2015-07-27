@@ -85,4 +85,15 @@ public class Utils {
           Log.i("LoverChat", message);
       }
   }
+  /**
+   * 检测Sdcard是否存在
+   * 
+   * @return
+   */
+  public static boolean isExitsSdcard() {
+      if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
+          return true;
+      else
+          return false;
+  }
 }

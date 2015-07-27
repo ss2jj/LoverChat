@@ -89,5 +89,19 @@
      <string name="Into_the_blacklist">加入黑名单</string>
      <string name="send_fail">发送失败</string>
      <string name="connect_failuer_toast">连接失败</string>
-    
+    <string name="Is_download_voice_click_later">正在下载语音 请稍后点击</string>
+    <string name="Recording_without_permission">没有录制权限</string>
+    <string name="The_recording_time_is_too_short">说话时间太短</string>
+    <string name="send_failure_please">发送失败</string>
+     <string name="cant_find_pictures">没找到图片</string>
+      <string name="sd_card_does_not_exist">没有SD卡</string>
+      
+      
+        <string name="temporary_does_not">没有SD卡</string>
+          <string name="The_video_to_start">没有SD卡</string>
+          <string name="Whether_to_send">没有SD卡</string>
+          <string name="cancel">取消</string>
+           <string name="prompt">取消</string>
+            <string name="Open_the_equipment_failure">取消</string>
+             <string name="Video_footage">取消</string>
 </resources>
