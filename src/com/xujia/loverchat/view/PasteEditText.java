@@ -15,6 +15,7 @@ package com.xujia.loverchat.view;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.text.ClipboardManager;
@@ -24,7 +25,9 @@ import android.util.AttributeSet;
 import android.widget.EditText;
 import android.widget.TextView.BufferType;
 
+import com.xujia.loverchat.R;
 import com.xujia.loverchat.activity.ChatActivity;
+import com.xujia.loverchat.activity.ConversationListActivity;
 
 
 
@@ -64,13 +67,13 @@ public class PasteEditText extends EditText{
             if(text.startsWith(ChatActivity.COPY_IMAGE)){
 //                intent.setDataAndType(Uri.fromFile(new File("/sdcard/mn1.jpg")), "image/*");     
                 text = text.replace(ChatActivity.COPY_IMAGE, "");
-               // Intent intent = new Intent(context,AlertDialog.class);
-              //  String str = context.getResources().getString(R.string.Send_the_following_pictures);
-             //   intent.putExtra("title", str);
-            //    intent.putExtra("forwardImage", text);
-             //   intent.putExtra("cancel", true);
-             //   ((Activity)context).startActivityForResult(intent,ChatActivity.REQUEST_CODE_COPY_AND_PASTE);
-//                clip.setText("");
+                Intent intent = new Intent(context,AlertDialog.class);
+                String str = context.getResources().getString(R.string.Send_the_following_pictures);
+                intent.putExtra("title", str);
+                intent.putExtra("forwardImage", text);
+                intent.putExtra("cancel", true);
+                ((Activity)context).startActivityForResult(intent,ConversationListActivity.REQUEST_CODE_COPY_AND_PASTE);
+        //        clip.setText("");
             }
         }
         return super.onTextContextMenuItem(id);

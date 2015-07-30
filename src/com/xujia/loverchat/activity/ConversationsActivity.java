@@ -72,8 +72,8 @@ public void refershUI() {
             //有未读消息 获取最后一条消息展示出来
            List<EMMessage> messages = conversation.getAllMessages();
            EMMessage message = messages.get(messages.size()-1);
-           TextMessageBody messBody =   (TextMessageBody) message.getBody();
-           unReadMessageText.setText(messBody.getMessage());
+        //   TextMessageBody messBody =   (TextMessageBody) message.getBody();
+           unReadMessageText.setText("您有"+conversation.getUnreadMsgCount()+"条未读消息");
            unReadMessageTimeText.setText(String.valueOf(message.getMsgTime()));
         }else {
             unReadMessageText.setText("");

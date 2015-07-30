@@ -40,10 +40,16 @@ import com.easemob.util.DateUtils;
 import com.easemob.util.EMLog;
 import com.easemob.util.TextFormater;
 import com.xujia.loverchat.R;
+import com.xujia.loverchat.activity.ContextMenu;
+import com.xujia.loverchat.activity.ConversationListActivity;
+import com.xujia.loverchat.activity.ShowBigImage;
+import com.xujia.loverchat.activity.ShowVideoActivity;
 import com.xujia.loverchat.control.LoadVideoImageTask;
+import com.xujia.loverchat.control.VoicePlayClickListener;
 import com.xujia.loverchat.utils.Consts;
 import com.xujia.loverchat.utils.ImageCache;
 import com.xujia.loverchat.utils.ImageUtils;
+import com.xujia.loverchat.utils.LoadImageTask;
 import com.xujia.loverchat.utils.SmileUtils;
 
 import java.io.File;
@@ -157,18 +163,14 @@ private Map<String, Timer> timers = new Hashtable<String, Timer>();
             return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_IMAGE : MESSAGE_TYPE_SENT_IMAGE;
 
         }
-        if (message.getType() == EMMessage.Type.LOCATION) {
-            return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_LOCATION : MESSAGE_TYPE_SENT_LOCATION;
-        }
+    
         if (message.getType() == EMMessage.Type.VOICE) {
             return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VOICE : MESSAGE_TYPE_SENT_VOICE;
         }
         if (message.getType() == EMMessage.Type.VIDEO) {
             return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VIDEO : MESSAGE_TYPE_SENT_VIDEO;
         }
-        if (message.getType() == EMMessage.Type.FILE) {
-            return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_FILE : MESSAGE_TYPE_SENT_FILE;
-        }
+   
 
         return -1;// invalid
     }
@@ -328,7 +330,7 @@ private Map<String, Timer> timers = new Hashtable<String, Timer>();
             }
         } else {
             // 如果是文本或者地图消息并且不是group messgae，显示的时候给对方发送已读回执
-            if ((message.getType() == Type.TXT || message.getType() == Type.LOCATION) && !message.isAcked) {
+            if ((message.getType() == Type.TXT ) && !message.isAcked) {
                 // 不是语音通话记录
                 if (!message.getBooleanAttribute(Consts.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
                     try {
@@ -382,19 +384,15 @@ private Map<String, Timer> timers = new Hashtable<String, Timer>();
                     intent.putExtra("title", activity.getString(R.string.resend));
                     intent.putExtra("cancel", true);
                     intent.putExtra("position", position);
-                   /** if (message.getType() == EMMessage.Type.TXT)
-                        activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_TEXT);
+                    if (message.getType() == EMMessage.Type.TXT)
+                        activity.startActivityForResult(intent, ConversationListActivity.REQUEST_CODE_TEXT);
                     else if (message.getType() == EMMessage.Type.VOICE)
-                        activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_VOICE);
+                        activity.startActivityForResult(intent, ConversationListActivity.REQUEST_CODE_VOICE);
                     else if (message.getType() == EMMessage.Type.IMAGE)
-                        activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_PICTURE);
-                    else if (message.getType() == EMMessage.Type.LOCATION)
-                        activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_LOCATION);
-                    else if (message.getType() == EMMessage.Type.FILE)
-                        activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_FILE);
+                        activity.startActivityForResult(intent, ConversationListActivity.REQUEST_CODE_PICTURE);
                     else if (message.getType() == EMMessage.Type.VIDEO)
-                        activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_VIDEO);
-                    **/
+                        activity.startActivityForResult(intent, ConversationListActivity.REQUEST_CODE_VIDEO);
+                   
                 }
             });
 
@@ -409,7 +407,7 @@ private Map<String, Timer> timers = new Hashtable<String, Timer>();
                     intent.putExtra("msg", st);
                     intent.putExtra("cancel", true);
                     intent.putExtra("position", position);
-                    //activity.startActivityForResult(intent, ChatActivity.REQUEST_CODE_ADD_TO_BLACKLIST);
+                    activity.startActivityForResult(intent, ConversationListActivity.REQUEST_CODE_ADD_TO_BLACKLIST);
                     return true;
                 }
             });
@@ -450,9 +448,9 @@ private Map<String, Timer> timers = new Hashtable<String, Timer>();
         holder.tv.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-            //    activity.startActivityForResult(
-             //           (new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type",
-               //                 EMMessage.Type.TXT.ordinal()), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
+                activity.startActivityForResult(
+                        (new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type",
+                                EMMessage.Type.TXT.ordinal()), ConversationListActivity.REQUEST_CODE_CONTEXT_MENU);
                 return true;
             }
         });
@@ -530,21 +528,16 @@ private Map<String, Timer> timers = new Hashtable<String, Timer>();
                 }
                 System.out.println("message status : " + message.status);
                 if (message.status == EMMessage.Status.SUCCESS) {
-                    // if (message.getType() == EMMessage.Type.FILE) {
-                    // holder.pb.setVisibility(View.INVISIBLE);
-                    // holder.staus_iv.setVisibility(View.INVISIBLE);
-                    // } else {
-                    // holder.pb.setVisibility(View.GONE);
-                    // holder.staus_iv.setVisibility(View.GONE);
-                    // }
+              
+                     holder.pb.setVisibility(View.GONE);
+                     holder.staus_iv.setVisibility(View.GONE);
+                    
 
                 } else if (message.status == EMMessage.Status.FAIL) {
-                    // if (message.getType() == EMMessage.Type.FILE) {
-                    // holder.pb.setVisibility(View.INVISIBLE);
-                    // } else {
-                    // holder.pb.setVisibility(View.GONE);
-                    // }
-                    // holder.staus_iv.setVisibility(View.VISIBLE);
+               
+                     holder.pb.setVisibility(View.GONE);
+                
+                     holder.staus_iv.setVisibility(View.VISIBLE);
                     Toast.makeText(activity, activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), 0)
                             .show();
                 }
@@ -580,9 +573,9 @@ private Map<String, Timer> timers = new Hashtable<String, Timer>();
         holder.iv.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-             //   activity.startActivityForResult(
-               //         (new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type",
-                 //               EMMessage.Type.IMAGE.ordinal()), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
+                activity.startActivityForResult(
+                        (new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type",
+                                EMMessage.Type.IMAGE.ordinal()), ConversationListActivity.REQUEST_CODE_CONTEXT_MENU);
                 return true;
             }
         });
@@ -767,11 +760,11 @@ private Map<String, Timer> timers = new Hashtable<String, Timer>();
                 @Override
                 public void onClick(View v) {
                     System.err.println("image view on click");
-                  //  Intent intent = new Intent(activity, ShowBigImage.class);
+                    Intent intent = new Intent(activity, ShowBigImage.class);
                     File file = new File(localFullSizePath);
                     if (file.exists()) {
                         Uri uri = Uri.fromFile(file);
-                        //intent.putExtra("uri", uri);
+                        intent.putExtra("uri", uri);
                         System.err.println("here need to check why download everytime");
                     } else {
                         // The local full size pic does not exist yet.
@@ -779,8 +772,8 @@ private Map<String, Timer> timers = new Hashtable<String, Timer>();
                         // first
                         // intent.putExtra("", message.get);
                         ImageMessageBody body = (ImageMessageBody) message.getBody();
-                       // intent.putExtra("secret", body.getSecret());
-                       // intent.putExtra("remotepath", remote);
+                       intent.putExtra("secret", body.getSecret());
+                       intent.putExtra("remotepath", remote);
                     }
                     if (message != null && message.direct == EMMessage.Direct.RECEIVE && !message.isAcked
                             && message.getChatType() != ChatType.GroupChat) {
@@ -791,13 +784,13 @@ private Map<String, Timer> timers = new Hashtable<String, Timer>();
                             e.printStackTrace();
                         }
                     }
-                    //activity.startActivity(intent);
+                    activity.startActivity(intent);
                 }
             });
             return true;
         } else {
 
-            //new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, message.getChatType(), iv, activity, message);
+            new LoadImageTask().execute(thumbernailPath, localFullSizePath, remote, message.getChatType(), iv, activity, message);
             return true;
         }
 
@@ -873,9 +866,9 @@ private Map<String, Timer> timers = new Hashtable<String, Timer>();
 
             @Override
             public boolean onLongClick(View v) {
-              //  activity.startActivityForResult(
-                //        new Intent(activity, ContextMenu.class).putExtra("position", position).putExtra("type",
-                  //              EMMessage.Type.VIDEO.ordinal()), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
+                activity.startActivityForResult(
+                        new Intent(activity, ContextMenu.class).putExtra("position", position).putExtra("type",
+                                EMMessage.Type.VIDEO.ordinal()), ConversationListActivity.REQUEST_CODE_CONTEXT_MENU);
                 return true;
             }
         });
@@ -1007,10 +1000,10 @@ private Map<String, Timer> timers = new Hashtable<String, Timer>();
                 public void onClick(View v) {
                     VideoMessageBody videoBody = (VideoMessageBody) message.getBody();
                     System.err.println("video view is on click");
-                    //Intent intent = new Intent(activity, ShowVideoActivity.class);
-                    //intent.putExtra("localpath", videoBody.getLocalUrl());
-                    //intent.putExtra("secret", videoBody.getSecret());
-                    //intent.putExtra("remotepath", videoBody.getRemoteUrl());
+                    Intent intent = new Intent(activity, ShowVideoActivity.class);
+                    intent.putExtra("localpath", videoBody.getLocalUrl());
+                    intent.putExtra("secret", videoBody.getSecret());
+                    intent.putExtra("remotepath", videoBody.getRemoteUrl());
                     if (message != null && message.direct == EMMessage.Direct.RECEIVE && !message.isAcked
                             && message.getChatType() != ChatType.GroupChat) {
                         message.isAcked = true;
@@ -1020,7 +1013,7 @@ private Map<String, Timer> timers = new Hashtable<String, Timer>();
                             e.printStackTrace();
                         }
                     }
-                    //activity.startActivity(intent);
+                    activity.startActivity(intent);
 
                 }
             });
@@ -1041,28 +1034,28 @@ private Map<String, Timer> timers = new Hashtable<String, Timer>();
     private void handleVoiceMessage(final EMMessage message, final ViewHolder holder, final int position, View convertView) {
         VoiceMessageBody voiceBody = (VoiceMessageBody) message.getBody();
         holder.tv.setText(voiceBody.getLength() + "\"");
-     //   holder.iv.setOnClickListener(new VoicePlayClickListener(message, holder.iv, holder.iv_read_status, this, activity, username));
+       holder.iv.setOnClickListener(new VoicePlayClickListener(message, holder.iv, holder.iv_read_status, this, activity, userName));
         holder.iv.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-              //  activity.startActivityForResult(
-               //         (new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type",
-                //                EMMessage.Type.VOICE.ordinal()), ChatActivity.REQUEST_CODE_CONTEXT_MENU);
+                activity.startActivityForResult(
+                        (new Intent(activity, ContextMenu.class)).putExtra("position", position).putExtra("type",
+                                EMMessage.Type.VOICE.ordinal()), ConversationListActivity.REQUEST_CODE_CONTEXT_MENU);
                 return true;
             }
         });
-       if (true/**((ChatActivity)activity).playMsgId != null
-                && ((ChatActivity)activity).playMsgId.equals(message
-                        .getMsgId())&&VoicePlayClickListener.isPlaying**/) {
-        /**    AnimationDrawable voiceAnimation;
+       if (((ConversationListActivity)activity).playMsgId != null
+                && ((ConversationListActivity)activity).playMsgId.equals(message
+                        .getMsgId())&&VoicePlayClickListener.isPlaying) {
+            AnimationDrawable voiceAnimation;
             if (message.direct == EMMessage.Direct.RECEIVE) {
-                holder.iv.setImageResource(R.anim.voice_from_icon);
+               // holder.iv.setImageResource(R.anim.voice_from_icon);
             } else {
-                holder.iv.setImageResource(R.anim.voice_to_icon);
+               // holder.iv.setImageResource(R.anim.voice_to_icon);
             }
-            voiceAnimation = (AnimationDrawable) holder.iv.getDrawable();
-            voiceAnimation.start();
-       **/ } else {
+           // voiceAnimation = (AnimationDrawable) holder.iv.getDrawable();
+           // voiceAnimation.start();
+        } else {
             if (message.direct == EMMessage.Direct.RECEIVE) {
                 holder.iv.setImageResource(R.drawable.chatfrom_voice_playing);
             } else {

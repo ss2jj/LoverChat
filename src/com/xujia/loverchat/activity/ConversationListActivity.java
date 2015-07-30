@@ -41,6 +41,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -102,6 +103,7 @@ public String playMsgId;
 private PowerManager.WakeLock wakeLock;
 private ClipboardManager clipboard;
 static int resendPos;
+private ProgressBar loadmorePB;
 public static final String COPY_IMAGE = "EASEMOBIMG";
 private static final int REQUEST_CODE_EMPTY_HISTORY = 2;
 public static final int REQUEST_CODE_CONTEXT_MENU = 3;
@@ -135,6 +137,8 @@ public static final int RESULT_CODE_DWONLOAD = 5;
 public static final int RESULT_CODE_TO_CLOUD = 6;
 public static final int RESULT_CODE_EXIT_GROUP = 7;
 private File cameraFile;
+private boolean isloading;
+private boolean haveMoreData = true;
 private Handler micImageHandler = new Handler() {
     @Override
     public void handleMessage(android.os.Message msg) {
@@ -388,6 +392,7 @@ private Handler micImageHandler = new Handler() {
         speak.setOnTouchListener(new SpeakListener());
         editTextLayout.setBackgroundResource(R.drawable.input_bar_bg_normal);
         expressionViewpager = (ViewPager) findViewById(R.id.vPager);
+        loadmorePB = (ProgressBar) findViewById(R.id.pb_load_more);
         // 表情list
         reslist = getExpressionRes(35);
         // 初始化表情viewpager
@@ -655,6 +660,7 @@ private Handler micImageHandler = new Handler() {
 
     }
     public void onClick(View view)  {
+        String st1 = getResources().getString(R.string.not_connect_to_server);
         if(view.getId() == R.id.iv_emoticons_normal)    {
             hideKeyboard();
             normalEmotion.setVisibility(View.GONE);
@@ -679,6 +685,18 @@ private Handler micImageHandler = new Handler() {
             // 点击摄像图标
             Intent intent = new Intent(ConversationListActivity.this, ImageGridActivity.class);
             startActivityForResult(intent, REQUEST_CODE_SELECT_VIDEO);
+        }else if (view.getId() == R.id.btn_voice_call) { // 点击语音电话图标
+            if (!EMChatManager.getInstance().isConnected())
+                Toast.makeText(this, st1, 0).show();
+            else
+                startActivity(new Intent(ConversationListActivity.this, VoiceCallActivity.class).putExtra("username", userName)
+                        .putExtra("isComingCall", false));
+        }else if (view.getId() == R.id.btn_video_call) { //视频通话
+            if (!EMChatManager.getInstance().isConnected())
+                Toast.makeText(this, st1, 0).show();
+            else
+                startActivity(new Intent(this, VideoCallActivity.class).putExtra("username", userName)
+                        .putExtra("isComingCall", false));
         }
     }
     
@@ -771,7 +789,7 @@ private Handler micImageHandler = new Handler() {
         public void onScrollStateChanged(AbsListView view, int scrollState) {
             switch (scrollState) {
             case OnScrollListener.SCROLL_STATE_IDLE:
-               /** if (view.getFirstVisiblePosition() == 0 && !isloading && haveMoreData) {
+                if (view.getFirstVisiblePosition() == 0 && !isloading && haveMoreData) {
                     loadmorePB.setVisibility(View.VISIBLE);
                     // sdk初始化加载的聊天记录为20条，到顶时去db里获取更多
                     List<EMMessage> messages;
@@ -779,7 +797,7 @@ private Handler micImageHandler = new Handler() {
                         // 获取更多messges，调用此方法的时候从db获取的messages
                         // sdk会自动存入到此conversation中
                      
-                            messages = conversation.loadMoreMsgFromDB(adapter.getItem(0).getMsgId(), pagesize);
+                            messages = conversation.loadMoreMsgFromDB(((EMMessage)adapter.getItem(0)).getMsgId(), Consts.PAGESIZE);
                   
                     } catch (Exception e1) {
                        // loadmorePB.setVisibility(View.GONE);
@@ -792,8 +810,8 @@ private Handler micImageHandler = new Handler() {
                     if (messages.size() != 0) {
                         // 刷新ui
                         adapter.notifyDataSetChanged();
-                        listView.setSelection(messages.size() - 1);
-                        if (messages.size() != pagesize)
+                        listview.setSelection(messages.size() - 1);
+                        if (messages.size() != Consts.PAGESIZE)
                             haveMoreData = false;
                     } else {
                         haveMoreData = false;
@@ -801,7 +819,7 @@ private Handler micImageHandler = new Handler() {
                     loadmorePB.setVisibility(View.GONE);
                     isloading = false;
 
-                }**/
+                }
                 break;
             }
         }

@@ -74,7 +74,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 	}
 
 	public void stopPlayVoice() {
-		voiceAnimation.stop();
+		//voiceAnimation.stop();
 		if (message.direct == EMMessage.Direct.RECEIVE) {
 			voiceIconView.setImageResource(R.drawable.chatfrom_voice_playing);
 		} else {
@@ -159,8 +159,8 @@ public class VoicePlayClickListener implements View.OnClickListener {
 		} else {
 			//voiceIconView.setImageResource(R.anim.voice_to_icon);
 		}
-		voiceAnimation = (AnimationDrawable) voiceIconView.getDrawable();
-		voiceAnimation.start();
+		//voiceAnimation = (AnimationDrawable) voiceIconView.getDrawable();
+		//voiceAnimation.start();
 	}
 
 	@Override
