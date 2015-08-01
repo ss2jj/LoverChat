@@ -29,11 +29,13 @@ import com.easemob.chat.EMChatOptions;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.OnMessageNotifyListener;
 import com.easemob.chat.OnNotificationClickListener;
+import com.xujia.loverchat.receiver.CallReceiver;
 import com.xujia.loverchat.utils.Utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
@@ -48,7 +50,7 @@ public  class HXSDKHelper {
     private String password = null;
     private HXSDKModel hxModel;
     private static HXSDKHelper me = null;
-    
+    private CallReceiver callReceiver;
     private HXSDKHelper(){
       //  me = this;
     }
@@ -259,6 +261,10 @@ public  class HXSDKHelper {
             }
         };
         EMChatManager.getInstance().addConnectionListener(connectionListener);
+        IntentFilter callFilter = new IntentFilter(EMChatManager.getInstance().getIncomingCallBroadcastAction());
+        if(callReceiver == null)
+            callReceiver = new CallReceiver();
+        appContext.registerReceiver(callReceiver, callFilter);    
     }
     
     /**

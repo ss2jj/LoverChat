@@ -15,14 +15,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMContactManager;
 import com.easemob.chat.EMGroupManager;
-import com.easemob.exceptions.EaseMobException;
 import com.xujia.loverchat.R;
 import com.xujia.loverchat.control.HXSDKHelper;
-import com.xujia.loverchat.model.UserDao;
 
-import java.util.List;
 
 public class MainActivity extends Activity {
 private static final int ANIM_TIME = 2000;

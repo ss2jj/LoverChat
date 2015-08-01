@@ -85,7 +85,8 @@ public class DefaultHXSDKModel extends HXSDKModel{
     @Override
     public boolean getSettingMsgSpeaker() {
         // TODO Auto-generated method stub
-        return PreferenceUtils.getValue(Consts.msgSpeaker, "unknow", Consts.userPre).equals("true")?true:false;
+        return true;
+       // return PreferenceUtils.getValue(Consts.msgSpeaker, "unknow", Consts.userPre).equals("true")?true:false;
     }
 
     @Override

@@ -26,8 +26,12 @@ import com.xujia.loverchat.model.UserDao;
 import com.xujia.loverchat.utils.Consts;
 import com.xujia.loverchat.utils.Utils;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class ConversationsActivity extends Activity implements View.OnClickListener{
     private RelativeLayout conversionFriend;
@@ -74,7 +78,10 @@ public void refershUI() {
            EMMessage message = messages.get(messages.size()-1);
         //   TextMessageBody messBody =   (TextMessageBody) message.getBody();
            unReadMessageText.setText("您有"+conversation.getUnreadMsgCount()+"条未读消息");
-           unReadMessageTimeText.setText(String.valueOf(message.getMsgTime()));
+           Calendar cal = Calendar.getInstance();
+           cal.setTimeInMillis(message.getMsgTime());
+           Formatter ft=new Formatter(Locale.CHINA);
+           unReadMessageTimeText.setText( ft.format("%1$tY年%1$tm月%1$td日%1$tT", cal).toString());
         }else {
             unReadMessageText.setText("");
             unReadMessageTimeText.setText("");

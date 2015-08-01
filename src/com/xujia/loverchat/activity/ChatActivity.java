@@ -198,6 +198,9 @@ public static final String COPY_IMAGE = "EASEMOBIMG";
         connectionListener =  new MyConnectionListener();
         EMChatManager.getInstance().addConnectionListener(connectionListener);
         
+       
+         
+        
         //注册添加好友监听
         EMContactManager.getInstance().setContactListener(new MyContactListener());
         Utils.printLog("initListener  ");
@@ -229,6 +232,7 @@ public static final String COPY_IMAGE = "EASEMOBIMG";
         }
     }
     
+
     //listview item 点击监听
     class  MyItemClickListener implements OnItemClickListener   {
 

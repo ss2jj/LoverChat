@@ -104,6 +104,7 @@ private PowerManager.WakeLock wakeLock;
 private ClipboardManager clipboard;
 static int resendPos;
 private ProgressBar loadmorePB;
+private IntentFilter ackMessageIntentFilter; 
 public static final String COPY_IMAGE = "EASEMOBIMG";
 private static final int REQUEST_CODE_EMPTY_HISTORY = 2;
 public static final int REQUEST_CODE_CONTEXT_MENU = 3;
@@ -167,6 +168,7 @@ private Handler micImageHandler = new Handler() {
         conversation =  EMChatManager.getInstance().getConversation(userName);
      // 把此会话的未读数置为0      
         conversation.resetUnreadMsgCount();
+        if(ConversationsActivity.activityInstance != null)
         ConversationsActivity.activityInstance.hander.sendEmptyMessage(1);
         // 初始化db时，每个conversation加载数目是getChatOptions().getNumberOfMessagesLoaded
         // 这个数目如果比用户期望进入会话界面时显示的个数不一样，就多加载一些
@@ -209,7 +211,7 @@ private Handler micImageHandler = new Handler() {
         registerReceiver(receiver, intentFilter);
 
         // 注册一个ack回执消息的BroadcastReceiver
-        IntentFilter ackMessageIntentFilter = new IntentFilter(EMChatManager.getInstance().getAckMessageBroadcastAction());
+         ackMessageIntentFilter = new IntentFilter(EMChatManager.getInstance().getAckMessageBroadcastAction());
         ackMessageIntentFilter.setPriority(5);
         registerReceiver(ackMessageReceiver, ackMessageIntentFilter);
 
@@ -281,10 +283,10 @@ private Handler micImageHandler = new Handler() {
                 break;
 
             case RESULT_CODE_FORWARD: // 转发消息
-                //EMMessage forwardMsg = (EMMessage) adapter.getItem(data.getIntExtra("position", 0));
-              //  Intent intent = new Intent(this, ForwardMessageActivity.class);
-                //intent.putExtra("forward_msg_id", forwardMsg.getMsgId());
-                //startActivity(intent);
+              /*  EMMessage forwardMsg = (EMMessage) adapter.getItem(data.getIntExtra("position", 0));
+                Intent intent = new Intent(this, ForwardMessageActivity.class);
+               intent.putExtra("forward_msg_id", forwardMsg.getMsgId());
+                startActivity(intent);*/
 
                 break;
 
