@@ -508,10 +508,10 @@ private Handler micImageHandler = new Handler() {
         ExpandGridView gv = (ExpandGridView) view.findViewById(R.id.gridview);
         List<String> list = new ArrayList<String>();
         if (i == 1) {
-            List<String> list1 = reslist.subList(0, 20);
+            List<String> list1 = reslist.subList(0, 21);
             list.addAll(list1);
         } else if (i == 2) {
-            list.addAll(reslist.subList(20, reslist.size()));
+            list.addAll(reslist.subList(21, reslist.size()));
         }
         list.add("delete_expression");
         final ExpressionAdapter expressionAdapter = new ExpressionAdapter(this, 1, list);
@@ -521,10 +521,11 @@ private Handler micImageHandler = new Handler() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String filename = expressionAdapter.getItem(position);
+                Utils.printLog("filename："+filename);
                 try {
                     // 文字输入框可见时，才可输入表情
                     // 按住说话可见，不让输入表情
-                    if (speakButton.getVisibility() != View.VISIBLE) {
+                    if (speakButton.getVisibility() == View.VISIBLE) {
 
                         if (filename != "delete_expression") { // 不是删除键，显示表情
                             // 这里用的反射，所以混淆的时候不要混淆SmileUtils这个类
@@ -627,7 +628,8 @@ private Handler micImageHandler = new Handler() {
             conversation.addMessage(message);
             listview.setAdapter(adapter);
             adapter.refresh();
-            listview.setSelection(listview.getCount() - 1);
+           // listview.setSelection(listview.getCount() - 1);
+            listview.smoothScrollToPosition(listview.getCount() - 1);
             setResult(RESULT_OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -737,7 +739,8 @@ private Handler micImageHandler = new Handler() {
 
         listview.setAdapter(adapter);
         adapter.refresh();
-        listview.setSelection(listview.getCount() - 1);
+        //listview.setSelection(listview.getCount() - 1);
+        listview.smoothScrollToPosition(listview.getCount() - 1);
         setResult(RESULT_OK);
         // more(more);
     }
@@ -763,7 +766,9 @@ private Handler micImageHandler = new Handler() {
             conversation.addMessage(message);
             // 通知adapter有消息变动，adapter会根据加入的这条message显示消息和调用sdk的发送方法
             adapter.refresh();
-            listview.setSelection(listview.getCount() - 1);
+         
+            //listview.setSelection(listview.getCount() - 1);
+            listview.smoothScrollToPosition(listview.getCount() - 1);
             mEditTextContent.setText("");
 
             setResult(RESULT_OK);
@@ -924,7 +929,8 @@ private Handler micImageHandler = new Handler() {
 
            conversation.addMessage(message);
            adapter.refresh();
-           listview.setSelection(listview.getCount() - 1);
+           //listview.setSelection(listview.getCount() - 1);
+           listview.smoothScrollToPosition(listview.getCount() - 1);
            setResult(RESULT_OK);
            // send file
            // sendVoiceSub(filePath, fileName, message);
@@ -959,7 +965,8 @@ private Handler micImageHandler = new Handler() {
            // EMChatManager.getInstance().getConversation(toChatUsername);
            // 通知adapter有新消息，更新ui
            adapter.refresh();
-           listview.setSelection(listview.getCount() - 1);
+          // listview.setSelection(listview.getCount() - 1);
+           listview.smoothScrollToPosition(listview.getCount() - 1);
 
        }
    }
