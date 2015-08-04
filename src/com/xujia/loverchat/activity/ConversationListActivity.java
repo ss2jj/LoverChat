@@ -26,6 +26,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -50,6 +51,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.easemob.EMError;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMContactManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.ImageMessageBody;
@@ -225,6 +227,14 @@ private Handler micImageHandler = new Handler() {
             // 显示发送要转发的消息
             forwardMessage(forward_msg_id);
         }
+    }
+    
+    protected void onDestroy() {
+        // TODO Auto-generated method stub
+        super.onDestroy();
+        unregisterReceiver(receiver);
+        unregisterReceiver(ackMessageReceiver);
+        unregisterReceiver(deliveryAckMessageReceiver);
     }
     /**
      * 转发消息
@@ -470,7 +480,12 @@ private Handler micImageHandler = new Handler() {
         edit.setVisibility(View.VISIBLE);
     }
     public void editClick(View view)    {
-        
+        listview.setSelection(listview.getCount() - 1);
+        if (more.getVisibility() == View.VISIBLE) {
+            more.setVisibility(View.GONE);
+            normalEmotion.setVisibility(View.VISIBLE);
+            checkEmotion.setVisibility(View.INVISIBLE);
+        }
     }
     public void more(View view) {
         hideKeyboard();
@@ -780,6 +795,30 @@ private Handler micImageHandler = new Handler() {
         startActivity(intent);
         finish();
     }
+    
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+           // TODO Auto-generated method stub
+       
+           if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+               if(more.isShown() || face.isShown())  {
+                   if(checkEmotion.isShown()) {
+                       normalEmotion.setVisibility(View.VISIBLE);
+                       checkEmotion.setVisibility(View.GONE);
+                   }
+                   more.setVisibility(View.GONE);
+                   face.setVisibility(View.VISIBLE);
+                   container.setVisibility(View.GONE);
+                   return true;
+               } else {
+                   Utils.printLog("back to chat");
+                   Intent intent = new Intent(ConversationListActivity.this,ChatActivity.class);
+                   startActivity(intent);
+                   finish();
+               }
+            return true;
+           }
+           return super.onKeyDown(keyCode, event);
+          }
     /**
      * 隐藏软键盘
      */
