@@ -2,7 +2,6 @@ package com.xujia.loverchat.model;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -40,6 +39,7 @@ import com.easemob.util.DateUtils;
 import com.easemob.util.EMLog;
 import com.easemob.util.TextFormater;
 import com.xujia.loverchat.R;
+import com.xujia.loverchat.activity.AlertDialog;
 import com.xujia.loverchat.activity.ContextMenu;
 import com.xujia.loverchat.activity.ConversationListActivity;
 import com.xujia.loverchat.activity.ShowBigImage;

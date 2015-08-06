@@ -15,7 +15,6 @@ package com.xujia.loverchat.view;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.text.ClipboardManager;
@@ -26,6 +25,7 @@ import android.widget.EditText;
 import android.widget.TextView.BufferType;
 
 import com.xujia.loverchat.R;
+import com.xujia.loverchat.activity.AlertDialog;
 import com.xujia.loverchat.activity.ChatActivity;
 import com.xujia.loverchat.activity.ConversationListActivity;
 

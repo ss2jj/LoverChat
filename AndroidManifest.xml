@@ -112,6 +112,11 @@
            
             android:windowSoftInputMode="stateAlwaysHidden" >
         </activity>
+           <activity
+            android:name="com.xujia.loverchat.activity.AlertDialog"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyDialogStyle" >
+        </activity>
     </application>
 
 </manifest>
